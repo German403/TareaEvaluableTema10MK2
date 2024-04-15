@@ -14,6 +14,10 @@ public class Empleado {
     private String puesto;
     private double salario;
 
+    public Empleado() {
+
+    }
+
     /**
      * Constructor de Empleado
      * @param nombre

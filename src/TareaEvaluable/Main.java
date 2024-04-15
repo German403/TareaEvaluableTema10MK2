@@ -25,26 +25,27 @@ public class Main {
      * Luego los añade al ArrayList
      */
     public static void ListaEmpleados(){
-        File fichero = new File (".\\src\\TareaEvaluable\\empresa.txt");
+        File fichero = new File (".\\src\\TareaEvaluable\\empleados.txt");
         Scanner scanner = null;
         try{
             String linea = scanner.nextLine();
             while (scanner.hasNextLine()) {
                 scanner = new Scanner(fichero);
-                String [] separador = linea.split("::");
-                Empleado.setNombre(separador[0]);
-                Empleado.setApellidos(separador[1]);
-                Empleado.setFechaNacimiento(LocalDate.parse(separador[2]));
-                Empleado.setFechaIngreso(LocalDate.parse(separador[3]));
-                Empleado.setPuesto(separador[4]);
-                Empleado.setSalario(Double.parseDouble(separador[5]));
-                Empleado empleado = new Empleado(separador[0], separador[1], separador[2], separador[3], separador[4], separador[5]);
+                Empleado empleado = new Empleado();
+                String[] separador = linea.split("::");
+                empleado.setNombre(separador[0]);
+                empleado.setApellidos(separador[1]);
+                empleado.setFechaNacimiento(LocalDate.parse(separador[2]));
+                empleado.setFechaIngreso(LocalDate.parse(separador[3]));
+                empleado.setPuesto(separador[4]);
+                empleado.setSalario(Double.parseDouble(separador[5]));
+                Empleado empleadoAñadir = new Empleado(separador[0], separador[1], LocalDate.parse(separador[2]), LocalDate.parse(separador[3]), separador[4], Double.parseDouble(separador[5]));
+                empresa.add(empleadoAñadir);
             }
         }catch (FileNotFoundException e1){
             e1.printStackTrace();
         }finally {
             try {
-
                 if (scanner !=null){
                     scanner.close();
                 }
