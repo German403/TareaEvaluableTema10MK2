@@ -14,9 +14,9 @@ public class Empleado {
     private String puesto;
     private double salario;
 
-    public Empleado() {
+    private LocalDate fechaDespido;
 
-    }
+    public Empleado() {}
 
     /**
      * Constructor de Empleado
@@ -27,13 +27,23 @@ public class Empleado {
      * @param puesto
      * @param salario
      */
-    public Empleado (String nombre, String apellidos, LocalDate fechaNacimiento, LocalDate fechaIngreso, String puesto, double salario){
+    public Empleado(String nombre, String apellidos, LocalDate fechaNacimiento, LocalDate fechaIngreso, String puesto, double salario){
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
         this.fechaIngreso = fechaIngreso;
         this.puesto = puesto;
         this.salario = salario;
+    }
+
+    public Empleado(String nombre, String apellidos, LocalDate fechaNacimiento, LocalDate fechaIngreso, String puesto, double salario, LocalDate fechaDespido){
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.fechaNacimiento = fechaNacimiento;
+        this.fechaIngreso = fechaIngreso;
+        this.puesto = puesto;
+        this.salario = salario;
+        this.fechaDespido = fechaDespido;
     }
 
     //Metodos getter & setter
@@ -131,6 +141,18 @@ public class Empleado {
      */
     public void setSalario(double salario) {
         this.salario = salario;
+    }
+
+    public LocalDate getFechaDespido() {
+        return fechaDespido;
+    }
+
+    public void setFechaDespido(LocalDate fechaDespido) {
+        this.fechaDespido = fechaDespido;
+    }
+
+    public String empleadosEliminados(){
+        return nombre+" "+apellidos+" nacido en "+fechaNacimiento+" llego a la empresa en "+fechaIngreso+" con puesto de "+puesto+" salario de "+salario+"€" + " y fue despedido en " + fechaDespido;
     }
 
     //Metodos propios
