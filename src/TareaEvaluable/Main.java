@@ -28,19 +28,18 @@ public class Main {
         File fichero = new File (".\\src\\TareaEvaluable\\empleados.txt");
         Scanner scanner = null;
         try{
-            String linea = scanner.nextLine();
-            while (scanner.hasNextLine()) {
-                scanner = new Scanner(fichero);
-                Empleado empleado = new Empleado();
+            scanner = new Scanner(fichero);
+            while (scanner.hasNextLine()){
+                String linea = scanner.nextLine();
                 String[] separador = linea.split("::");
+                Empleado empleado = new Empleado();
                 empleado.setNombre(separador[0]);
                 empleado.setApellidos(separador[1]);
                 empleado.setFechaNacimiento(LocalDate.parse(separador[2]));
                 empleado.setFechaIngreso(LocalDate.parse(separador[3]));
                 empleado.setPuesto(separador[4]);
                 empleado.setSalario(Double.parseDouble(separador[5]));
-                Empleado empleadoAñadir = new Empleado(separador[0], separador[1], LocalDate.parse(separador[2]), LocalDate.parse(separador[3]), separador[4], Double.parseDouble(separador[5]));
-                empresa.add(empleadoAñadir);
+                empresa.add(empleado);
             }
         }catch (FileNotFoundException e1){
             e1.printStackTrace();
@@ -50,7 +49,7 @@ public class Main {
                     scanner.close();
                 }
             }catch (Exception e){
-                System.out.println("Error al cerrar el fichero");
+                JOptionPane.showMessageDialog(null,"Error al cerrar el fichero", "Error", 0);
                 e.printStackTrace();
             }
         }//Fin try-catch-finally
@@ -78,28 +77,8 @@ public class Main {
      * @throws IllegalAccessException excepcion personalizada para los casos en que el entero se menor a 1 o mayor a 6
      */
     public static int menu() {
-        int opcion = 0;
-        do {
-            repetir = false;
-            try{
-                opcion = Integer.parseInt(JOptionPane.showInputDialog("Seleccione una de las siguientes opciones"+
-                        "\nSeleccione 1 para añadir un empleado"+
-                        "\nSeleccione 2 para eliminar un empleado"+
-                        "\nSeleccione 3 para buscar un empleado y ver sus datos"+
-                        "\nSeleccione 4 para ver los empleados bajo un orden"+
-                        "\nSeleccione 5 para calcular el gasto total de los empleados de la empresa"+
-                        "\nSeleccione 6 para salir del programa"));
-                if (opcion < 1 || opcion > 6){
-                    throw new IllegalAccessException();
-                }
-            }catch (NumberFormatException e1){
-                JOptionPane.showMessageDialog(null, "Valor no valido, error de formato", "Error de opcion", 0);
-                repetir = true;
-            }catch (IllegalAccessException e2){
-                JOptionPane.showMessageDialog(null, "Las opciones son de 1 a 6", "Error de opcion", 0 );
-                repetir = true;
-            }
-        }while(repetir);
+        String[] opciones = {"Añadir un empleado", "Eliminar un empleado", "Buscar un empleado", "Ver los empleados", "Calcular los gastos totales", "Salir del programa"};
+        int opcion = JOptionPane.showOptionDialog(null, "Seleccione una de las siguientes opciones", "MENU", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]) + 1;
         return opcion;
     }//Fin metodo menu
 
@@ -339,25 +318,8 @@ public class Main {
      * @throws IllegalAccessException excepcion personalizada para los casos en que el entero se menor a 1 o mayor a 3
      */
     public static void mostrarEmpresa() {
-        int opcionOrden = 0;
-        do {
-            repetir = false;
-            try{
-                opcionOrden = Integer.parseInt(JOptionPane.showInputDialog("Seleccione una de las siguientes opciones"+
-                        "\nSeleccione 1 para ver los empleados ordenados por su antiguedad"+
-                        "\nSeleccione 2 para ver los empleados ordenados por su salario de menor a mayor"+
-                        "\nSeleccione 3 para ver los empleados ordenados por su apellido"));
-                if (opcionOrden < 1 || opcionOrden > 3){
-                    throw new IllegalAccessException();
-                }
-            }catch (NumberFormatException e1){
-                JOptionPane.showMessageDialog(null, "Valor no valido, error de formato", "Error de opcion", 0);
-                repetir = true;
-            }catch (IllegalAccessException e2){
-                JOptionPane.showMessageDialog(null, "Las opciones son de 1 a 3", "Error de opcion", 0 );
-                repetir = true;
-            }
-        }while(repetir);
+        String[] opciones = {"Antigüedad", "Salario", "Apellido"};
+        int opcionOrden = JOptionPane.showOptionDialog(null, "Seleccione para ver los empleados ordenados por:", "MENU", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]) + 1;
         switch (opcionOrden){
             case 1:
                 //Ordenacion de la lista de objetos por la antiguedad (fecha de ingreso)
