@@ -10,13 +10,20 @@ import java.util.*;
  * @author German Escudero Rodriguez
  * @version jdk-17
  * 13/04/2024
+ * Este programa registra empleados de una empresa y los almacena en un archivo de texto simulando una base de datos con persistencia de datos
+ * En el programa se podran tratar esos datos como añadir nuevos empleados, eliminarlos o verlos mediante los diferentes metodos del programa usando un ArrayList como intermediario
  */
 public class Main {
-    public static Scanner scanner = new Scanner(System.in);
     public static boolean repetir = false;//Variable que se usara para los bucles de las excepciones de los diferentes metodos del codigo
-    public static ArrayList<Empleado> empresa = new ArrayList<Empleado>();
-    public static ArrayList<Empleado> antiguosEmpleados = new ArrayList<Empleado>();
+    public static ArrayList<Empleado> empresa = new ArrayList<Empleado>();//Lista donde se almacenaran los empleados de la empresa
+    public static ArrayList<Empleado> antiguosEmpleados = new ArrayList<Empleado>();//Lista donde se almacenaran los empleados eliminados
 
+    /**
+     * Metodo donde se crean los empleados y se introducen en un ArayList
+     * Los empleados seran tomados del archivo de texto se ajustaran sus variables y se introduciran en la lista
+     * @throws FileNotFoundException excepcion para los casos en los que el archivo de texto no es encontrado
+     * @throws Exception excepcion para los casos en los que el ocurra un error al cerrar el Scanner
+     */
     public static void ListaEmpleados(){
         File fichero = new File (".\\src\\TareaEvaluable\\empleados.txt");
         Scanner scanner = null;
@@ -48,6 +55,10 @@ public class Main {
         }//Fin try-catch-finally
     }//Fin metodo listaEmpleados
 
+    /**
+     * Metodo que toma el ArrayList de la empresa y acutaliza el archivo de texto con los mismos empleados que el ArrayList
+     * @throws IOException Excepcion para los casos en los que no se pudo actualizar el archivo de texto
+     */
     public static void actualizador(){
         try (BufferedWriter actualizador = new BufferedWriter(new FileWriter(".\\src\\TareaEvaluable\\empleados.txt"))){
             for (Empleado empleado : empresa){
@@ -64,12 +75,28 @@ public class Main {
         }
     }
 
+    /**
+     * Metodo menu donde se detallan las opciones que da el codigo para manipular los datos
+     * Se utilizara un array para que el metodo pueda usar botones con la libreria JOptionPane
+     * @return opcion
+     */
     public static int menu() {
         String[] opciones = {"Añadir un empleado", "Eliminar un empleado", "Buscar un empleado", "Ver los empleados", "Calcular los gastos totales","Ver los empleados despedidos" , "Salir del programa"};
         int opcion = JOptionPane.showOptionDialog(null, "Seleccione una de las siguientes opciones", "MENU", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]) + 1;
         return opcion;
     }//Fin metodo menu
 
+    /**
+     * Metodo para añadir un nuevo empleado al ArrayList
+     * En el se crearan unas variables temporales donde se les dara los valores correspondientes que introducira el usuario y luego se creara el objeto con esos valores
+     * Una vez creado el objeto se añadira al ArrayList en ultima posicion
+     * Una vez creado el empleado se invocara el metodo actualizador() para añadir el nuevo empleado al archivo de texto
+     * En el metodo se le asignara un sistema de excepciones que no permitira avanzar hasta que las condiciones sean correctas
+     * @throws InputMismatchException
+     * @throws NumberFormatException excepcion para los casos en que se utilice un caracter diferente a un numero entero
+     * @throws IllegalAccessException excepcion personalizada para los casos en que el entero este fuera del rango establecido
+     * @throws DateTimeException excepcion solo para las variables de tipo LocalDate que se activara en caso de que la fehca sea imposible
+     */
     public static void introducirEmpleado() {
         String nombreTemp = "";
         String apellidoTemp = "";
@@ -257,7 +284,17 @@ public class Main {
         actualizador();
     }//Fin metodo introducir empleado
 
+    /**
+     * Metodo para eliminar empleados en el cual se eliminaran los empleados que se den coincidencia de nombre
+     * Los empleados seran eliminados del ArrayList empresa y luego usando el metodo actualizador() el archivo de texto se corregira con los empleados existentes
+     * Los empleados eliminados seran enviados al archivo de texto empleadosAntiguos donde se almacenaran
+     * @param empresa
+     * @param nombre
+     * @throws IOException excepcion para los casos en los que no se pudo actualizar el archivo de texto
+     * @throws IllegalAccessException excepcion personalizada para los casos en que no se localice ningun empleado con el nombre introducido
+     */
     public static void eliminarEmpleado(ArrayList<Empleado> empresa, String nombre) {
+        int comprobador = 0;
         try (BufferedWriter eliminador = new BufferedWriter(new FileWriter(".\\src\\TareaEvaluable\\empleadosAntiguos.txt", true))){
             Iterator<Empleado> eliminar = empresa.iterator();
             while (eliminar.hasNext()){
@@ -274,16 +311,25 @@ public class Main {
                     eliminar.remove();
                     actualizador();
                     JOptionPane.showMessageDialog(null, "El empleado ha sido eliminado correctamente", "Fin de proceso", 1);
-                    return;
+                    comprobador++;
                 }//Fin if
             }//Fin while
+            if (comprobador == 0){
+                throw new IllegalAccessException();
+            }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, "Error al almacenar los empleados en el archibo", "Error", 0);
+            JOptionPane.showMessageDialog(null, "Error al almacenar los empleados en el archivo", "Error", 0);
+        } catch (IllegalAccessException e2){
+            JOptionPane.showMessageDialog(null, "No se encontró ningún empleado con el nombre introducido", "Error de busqueda", 0);//En caso de no encontrarse al empleado se mostrara el mensaje de no encontrado
         }
-
-        JOptionPane.showMessageDialog(null, "No se encontró ningún empleado con el nombre introducido", "Error de busqueda", 0);//En caso de no encontrarse al empleado se mostrara el mensaje de no encontrado
     }//Fin metodo eliminarEmpleado
 
+    /**
+     * Metodo que busca entre los empleados existentes del ArrayList empresa con el nombre dado anteriormente y en caso de coincidencia lo muestra en pantalla
+     * En caso de que existan varias empleados con el que existe coincidencia en el nombre se mostraran todos los empleados con la coincidencia
+     * @param empresa
+     * @param nombre
+     */
     public static void mostrarEmpleado(ArrayList<Empleado> empresa, String nombre) {
         String buscados = "";
         int i = 1;
@@ -303,6 +349,12 @@ public class Main {
             JOptionPane.showMessageDialog(null, buscados, "Datos del empleado", 1);
     }//Fin metodo mostrarEmpleado
 
+    /**
+     * Metodo de ordencion del ArrayList de mediante diferentes preferencias segun el caso elegido
+     * Los empleados se ordenaran segun su antigÜedad en la empresa, segun su salario o segun su apellido mediante la comparacion de sus valores
+     * @throws NumberFormatException excepcion para los casos en que se utilice un caracter diferente a un numero entero
+     * @throws IllegalAccessException excepcion personalizada para los casos en que el entero se menor a 1 o mayor a 3
+     */
     public static void mostrarEmpresa() {
         String[] opciones = {"Antigüedad", "Salario", "Apellido"};
         int opcionOrden = JOptionPane.showOptionDialog(null, "Seleccione para ver los empleados ordenados por:", "MENU", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]) + 1;
@@ -350,6 +402,14 @@ public class Main {
         JOptionPane.showMessageDialog(null, "El gasto total de todos los empleados de la empresa es de "+total+"€", "Gastos de la empresa", 1);
     }//Fin metodo gastoTotal
 
+    /**
+     * Metodo donde se crean los empleados usando el archivo de texto de empleadosAntigos y se introducen en un ArrayList
+     * Luego estos empleados seran mostrados
+     * @throws FileNotFoundException excepcion para los casos en los que el archivo de texto no es encontrado
+     * @throws Exception excepcion para los casos en los que el ocurra un error al cerrar el Scanner
+     * @throws ArrayIndexOutOfBoundsException excepcion para los casos en los que se de error en la asignacion de variables
+     * Es importante que en caso de no existir datos en el archivo de texto deben borrarse las lineas en blanco para evitar que el programa busque datos
+     */
     public static void mostrarEmpleadosAntiguos(){
         File empleadosAntiguos = new File (".\\src\\TareaEvaluable\\empleadosAntiguos.txt");
         Scanner scanner = null;
@@ -370,6 +430,8 @@ public class Main {
             }
         }catch (FileNotFoundException e1){
             e1.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e2){
+            JOptionPane.showMessageDialog(null, "Existe un error entre los datos de los empleados o el archivo de texto tiene una linea en blanco sobrante", "Error en el archivo", 2);
         }finally {
             try {
                 if (scanner !=null){
@@ -382,6 +444,10 @@ public class Main {
         }//Fin try-catch-finally
     }
 
+    /**
+     * Metodo donde se ejecutara la opcion segun la elegida en el metodo menu y este usara el metodo al que corresponda cada caso del switch
+     * @throws InputMismatchException
+     */
     public static void ejecucion(){
         int opcion;
         do {
@@ -451,7 +517,7 @@ public class Main {
 
     /**
      * Metodo main del programa
-     * Se invoca el metodo ListaEmpleados que es en el cual se crearon los objetos y fueron añadidos al ArrayList para que la lista contenga datos desde el principio
+     * Se invoca el metodo ListaEmpleados que es en el cual se toman los datos del archivo de texto y se crean los empleados con sus valores y se introducen en la lista
      * Se invoca el metodo ejecucion donde estan todas las opcion para la manipulacion de los datos
      * @param args
      */

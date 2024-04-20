@@ -1,5 +1,5 @@
-Juan::Torres::1960-01-01::1980-05-25::Jefe::60000.0
+Pepe::Uriel::1991-10-04::2015-10-01::Administrativo::24000.0
 Sara::Gonzalez::1980-05-02::1999-06-03::Secretaria::25000.0
 Elena::Sanchez::1990-09-03::2010-11-02::TecnicoFP::30000.0
-Pepe::Uriel::1991-10-04::2015-10-01::Administrativo::24000.0
+Juan::Torres::1960-01-01::1980-05-25::Jefe::60000.0
 German::Escudero::2004-07-04::2024-03-21::Programador::20000.0

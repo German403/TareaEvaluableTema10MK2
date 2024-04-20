@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 /**
  * Esta clase sera utilizada para la construccion de objetos del main
- * Tendra los atributos del empleado y luego se crearan estos objetos en el main y se almacenaran en un ArrayList
+ * Tendra los atributos del empleado y luego se crearan estos objetos en el main y se almacenaran en un ArrayList y de este se transmitiran al archivo de texto
  */
 public class Empleado {
     private String nombre;
@@ -16,6 +16,9 @@ public class Empleado {
 
     private LocalDate fechaDespido;
 
+    /**
+     * Constructor vacio para la creacion de empleados
+     */
     public Empleado() {}
 
     /**
@@ -36,6 +39,16 @@ public class Empleado {
         this.salario = salario;
     }
 
+    /**
+     * Constructor de Empleados eliminados
+     * @param nombre
+     * @param apellidos
+     * @param fechaNacimiento
+     * @param fechaIngreso
+     * @param puesto
+     * @param salario
+     * @param fechaDespido
+     */
     public Empleado(String nombre, String apellidos, LocalDate fechaNacimiento, LocalDate fechaIngreso, String puesto, double salario, LocalDate fechaDespido){
         this.nombre = nombre;
         this.apellidos = apellidos;
@@ -143,19 +156,31 @@ public class Empleado {
         this.salario = salario;
     }
 
+    /**
+     * Retotna la fecha de despido del empleado eliminado
+     * @return fechaDespido
+     */
     public LocalDate getFechaDespido() {
         return fechaDespido;
     }
 
+    /**
+     * Asigna la fecha de despido del empleado eliminado
+     * @param fechaDespido
+     */
     public void setFechaDespido(LocalDate fechaDespido) {
         this.fechaDespido = fechaDespido;
     }
 
+    //Metodos propios
+    /**
+     * Retorna una linea de texto donde se detallan los datos del empleado eliminado
+     * @return datos del empleado eliminado
+     */
     public String empleadosEliminados(){
         return nombre+" "+apellidos+" nacido en "+fechaNacimiento+" llego a la empresa en "+fechaIngreso+" con puesto de "+puesto+" salario de "+salario+"€" + " y fue despedido en " + fechaDespido;
     }
 
-    //Metodos propios
     /**
      * Retorna una linea de texto donde se detallan todos los datos del empleado
      * @return los datos del empleado
